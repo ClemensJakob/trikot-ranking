@@ -150,8 +150,6 @@
     padding: .9rem 1.1rem;
     background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius);
   }
-  .progress { font-size: .85rem; color: var(--text-dim); }
-  .progress strong { color: var(--accent); font-size: 1.1rem; font-variant-numeric: tabular-nums; }
   .actions { display: flex; gap: .5rem; flex-wrap: wrap; }
 
   .btn {
@@ -168,13 +166,11 @@
 
   .board {
     display: grid;
-    grid-template-columns: minmax(280px, 1fr) minmax(360px, 1.05fr);
+    grid-template-columns: 1fr;
+    max-width: 640px;
     gap: 1.6rem;
-    margin-top: 1.6rem;
+    margin: 1.6rem auto 0;
     align-items: start;
-  }
-  @media (max-width: 860px) {
-    .board { grid-template-columns: 1fr; }
   }
 
   .panel {
@@ -187,45 +183,16 @@
   }
   .panel h2 .hint { font-size: .68rem; font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--text-dim); }
 
-  .pool-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(104px, 1fr));
-    gap: .55rem;
-    min-height: 120px;
-    border-radius: 6px;
-    transition: background .15s ease, box-shadow .15s ease;
-  }
-  .pool-grid.dragover { background: var(--accent-soft); box-shadow: inset 0 0 0 2px var(--accent); }
-  .pool-empty {
-    grid-column: 1 / -1; text-align: center; color: var(--text-dim);
-    font-size: .85rem; padding: 1.6rem .5rem;
-  }
-
-  .kit-card {
-    background: var(--card); border: 1px solid var(--line); border-radius: 6px;
-    padding: .45rem; display: flex; flex-direction: column; gap: .4rem;
-    cursor: grab; user-select: none;
-    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease, opacity .15s ease;
-  }
-  .kit-card:hover { transform: translateY(-2px); border-color: var(--line-strong); box-shadow: var(--shadow); background: var(--card-hover); }
-  .kit-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .kit-card.selected { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); }
-  .kit-card.dragging { opacity: .35; }
-  .kit-card .thumb { aspect-ratio: 4 / 5; border-radius: 4px; overflow: hidden; background: #f4f4f0; }
-  .kit-card .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .kit-card .name { font-size: .68rem; font-weight: 600; text-align: center; line-height: 1.18; }
-
   .rank-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .4rem; }
 
   .rank-row {
-    display: grid; grid-template-columns: 40px 1fr auto;
+    display: grid; grid-template-columns: 40px 1fr;
     align-items: stretch; min-height: 58px;
     border-radius: 6px; position: relative;
     transition: background .15s ease, box-shadow .15s ease, border-color .15s ease;
   }
   .rank-row.filled { background: var(--card); border: 1px solid var(--line); cursor: grab; }
   .rank-row.filled:hover { border-color: var(--line-strong); box-shadow: var(--shadow); }
-  .rank-row.empty { border: 1px dashed var(--line-strong); }
   .rank-row.dragover { box-shadow: inset 0 0 0 2px var(--accent); background: var(--accent-soft); }
   .rank-row.dragging { opacity: .35; }
   .rank-row.selected { box-shadow: 0 0 0 2px var(--accent); }
@@ -249,17 +216,6 @@
   .rank-content .thumb { width: 38px; height: 38px; border-radius: 4px; overflow: hidden; flex-shrink: 0; background: #f4f4f0; }
   .rank-content .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .rank-content .name { font-weight: 600; font-size: .86rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .rank-content .empty-hint { font-size: .78rem; color: var(--text-dim); font-style: italic; }
-
-  .remove-btn {
-    align-self: center; margin-right: .5rem;
-    width: 24px; height: 24px; border-radius: 50%;
-    border: 1px solid var(--line-strong); background: transparent; color: var(--text-dim);
-    font-size: .95rem; line-height: 1; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-    transition: border-color .15s ease, color .15s ease, background .15s ease;
-  }
-  .remove-btn:hover { border-color: var(--z-rel); color: var(--z-rel); background: var(--accent-soft); }
 
   .legend {
     list-style: none; margin: 1rem 0 0; padding: .8rem 0 0;
@@ -342,11 +298,11 @@
 
   /* ---- Pointer-based drag & drop (mouse, touch, pen) ---- */
 
-  .kit-card img, .rank-content .thumb img, .lightbox-img img {
+  .rank-content .thumb img, .lightbox-img img {
     -webkit-user-drag: none; user-drag: none;
   }
-  .kit-card, .rank-row { touch-action: none; }
-  .kit-card.dragging, .rank-row.dragging { cursor: grabbing; }
+  .rank-row { touch-action: none; }
+  .rank-row.dragging { cursor: grabbing; }
   body.is-dragging { cursor: grabbing; }
 
   .drag-ghost {
@@ -369,9 +325,8 @@
     .zoom-btn svg { width: 16px; height: 16px; }
     .rank-content .thumb .zoom-btn { width: 30px; height: 30px; }
     .rank-content .thumb .zoom-btn svg { width: 15px; height: 15px; }
-    .remove-btn { width: 34px; height: 34px; font-size: 1.15rem; }
     .btn { padding: .75rem 1.05rem; }
-    .kit-card, .rank-row { cursor: default; }
+    .rank-row { cursor: default; }
   }
 
   /* ---- Small screens: bigger, fewer elements instead of tiny ones ---- */
@@ -387,16 +342,11 @@
     .board { gap: 1.1rem; margin-top: 1.2rem; }
     .panel { padding: .9rem; }
 
-    .pool-grid { grid-template-columns: repeat(2, 1fr); gap: .7rem; }
-    .kit-card { padding: .55rem; gap: .5rem; }
-    .kit-card .name { font-size: .8rem; }
-
-    .rank-row { grid-template-columns: 44px 1fr auto; min-height: 66px; }
+    .rank-row { grid-template-columns: 44px 1fr; min-height: 66px; }
     .rank-num { font-size: 1.25rem; }
     .rank-content { gap: .6rem; padding: .5rem .6rem; }
     .rank-content .thumb { width: 46px; height: 46px; }
     .rank-content .name { font-size: .92rem; white-space: normal; }
-    .remove-btn { margin-right: .3rem; }
   }
 </style>
 
@@ -405,23 +355,16 @@
     <header class="hero">
       <p class="eyebrow">Saison 2026&#8202;/&#8202;27 &middot; Bundesliga</p>
       <h1>Heimtrikot-Tabelle</h1>
-      <p class="lede">18 neue Heimtrikots, ein Wettbewerb. Zieh die Trikots aus der Kammer in deine Tabelle &ndash; von Meister bis Absteiger.</p>
+      <p class="lede">18 neue Heimtrikots, zufällig einsortiert. Zieh die Trikots in deiner Tabelle an die richtige Position &ndash; von Meister bis Absteiger.</p>
       <div class="toolbar">
-        <div class="progress" role="status" aria-live="polite"><strong id="progressCount">0</strong> / 18 platziert</div>
         <div class="actions">
-          <button class="btn" id="shuffleBtn" type="button">Kammer mischen</button>
-          <button class="btn" id="resetBtn" type="button">Zur&uuml;cksetzen</button>
+          <button class="btn" id="shuffleBtn" type="button">Neu mischen</button>
           <button class="btn primary" id="copyBtn" type="button">Ranking kopieren</button>
         </div>
       </div>
     </header>
 
     <main class="board">
-      <section class="panel pool-panel" aria-label="Trikotkammer">
-        <h2>Trikotkammer <span class="hint" id="poolHint">Ziehen oder antippen</span></h2>
-        <div class="pool-grid" id="pool"></div>
-      </section>
-
       <section class="panel" aria-label="Deine Tabelle">
         <h2>Deine Tabelle</h2>
         <ol class="rank-list" id="rankList"></ol>
@@ -478,9 +421,8 @@ const TEAMS = [
 <script>
 (function(){
   "use strict";
-  var STORAGE_KEY = 'bl2627-kit-ranking-v1';
-  var ranking = new Array(18).fill(null);
-  var pool = [];
+  var STORAGE_KEY = 'bl2627-kit-ranking-v2';
+  var ranking = [];
   var selected = null;
   var toastTimer = null;
   var activeDrag = null;
@@ -489,9 +431,7 @@ const TEAMS = [
   var DRAG_THRESHOLD = 6;
   var GHOST_WIDTH = 128;
 
-  var poolEl = document.getElementById('pool');
   var rankListEl = document.getElementById('rankList');
-  var progressCountEl = document.getElementById('progressCount');
   var toastEl = document.getElementById('toast');
   var announcerEl = document.getElementById('announcer');
   var lightboxEl = document.getElementById('lightbox');
@@ -542,7 +482,7 @@ const TEAMS = [
     return arr;
   }
 
-  function freshPool() { return shuffle(TEAMS.map(function (t) { return t.id; })); }
+  function freshRanking() { return shuffle(TEAMS.map(function (t) { return t.id; })); }
 
   function loadState() {
     try {
@@ -551,27 +491,23 @@ const TEAMS = [
         var saved = JSON.parse(raw);
         var ids = {};
         TEAMS.forEach(function (t) { ids[t.id] = true; });
-        var validRanking = Array.isArray(saved.ranking) && saved.ranking.length === 18 &&
-          saved.ranking.every(function (v) { return v === null || ids[v]; });
-        var validPool = Array.isArray(saved.pool) && saved.pool.every(function (v) { return ids[v]; });
-        if (validRanking && validPool) {
+        var validRanking = Array.isArray(saved.ranking) && saved.ranking.length === TEAMS.length &&
+          saved.ranking.every(function (v) { return ids[v]; });
+        if (validRanking) {
           var seen = {};
-          saved.ranking.forEach(function (v) { if (v) seen[v] = true; });
-          saved.pool.forEach(function (v) { seen[v] = true; });
+          saved.ranking.forEach(function (v) { seen[v] = true; });
           if (Object.keys(seen).length === TEAMS.length) {
             ranking = saved.ranking;
-            pool = saved.pool;
             return;
           }
         }
       }
     } catch (e) { /* ignore corrupted storage */ }
-    ranking = new Array(18).fill(null);
-    pool = freshPool();
+    ranking = freshRanking();
   }
 
   function persist() {
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ ranking: ranking, pool: pool })); } catch (e) { /* ignore */ }
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ ranking: ranking })); } catch (e) { /* ignore */ }
   }
 
   function escapeHtml(s) {
@@ -600,61 +536,24 @@ const TEAMS = [
     toastTimer = setTimeout(function () { toastEl.classList.remove('show'); }, 2600);
   }
 
-  function placeFromPool(id, index) {
-    var occupant = ranking[index];
-    ranking[index] = id;
-    pool = pool.filter(function (x) { return x !== id; });
-    if (occupant) pool.push(occupant);
-    selected = null;
-    render();
-  }
-
   function moveWithinRank(fromIndex, toIndex) {
     if (fromIndex !== toIndex) {
-      var a = ranking[fromIndex], b = ranking[toIndex];
-      ranking[toIndex] = a;
-      ranking[fromIndex] = b;
+      var id = ranking[fromIndex];
+      ranking.splice(fromIndex, 1);
+      ranking.splice(toIndex, 0, id);
     }
     selected = null;
-    render();
-  }
-
-  function removeFromRank(index) {
-    var id = ranking[index];
-    if (id) { ranking[index] = null; pool.push(id); }
-    selected = null;
-    render();
-  }
-
-  function swapPoolIntoRank(id, index) {
-    var occupant = ranking[index];
-    ranking[index] = id;
-    pool = pool.filter(function (x) { return x !== id; });
-    if (occupant) pool.push(occupant);
-    selected = null;
-    render();
-  }
-
-  function onPoolCardClick(id) {
-    if (selected && selected.type === 'pool' && selected.id === id) { selected = null; render(); return; }
-    if (selected && selected.type === 'rank') { swapPoolIntoRank(id, selected.index); return; }
-    selected = { type: 'pool', id: id };
-    announce(teamById(id).name + ' ausgewählt. Tippe auf einen Platz in der Tabelle.');
     render();
   }
 
   function onRankRowClick(idx) {
-    var id = ranking[idx];
-    if (selected && selected.type === 'pool') { placeFromPool(selected.id, idx); return; }
-    if (selected && selected.type === 'rank') {
-      if (selected.index === idx) { selected = null; render(); } else { moveWithinRank(selected.index, idx); }
+    if (selected !== null) {
+      if (selected === idx) { selected = null; render(); } else { moveWithinRank(selected, idx); }
       return;
     }
-    if (id) {
-      selected = { type: 'rank', id: id, index: idx };
-      announce(teamById(id).name + ' ausgewählt. Tippe auf einen anderen Platz zum Tauschen.');
-      render();
-    }
+    selected = idx;
+    announce(teamById(ranking[idx]).name + ' ausgewählt. Tippe auf einen anderen Platz, um es dorthin zu verschieben.');
+    render();
   }
 
   // ---- Pointer-based drag & drop: unified mouse, touch and pen ----
@@ -687,10 +586,7 @@ const TEAMS = [
     if (!el) return null;
     var rankRow = el.closest('.rank-row');
     if (rankRow && rankListEl.contains(rankRow)) {
-      return { type: 'rank', index: parseInt(rankRow.dataset.index, 10), el: rankRow };
-    }
-    if (el.closest('#pool') || el.closest('.pool-panel')) {
-      return { type: 'pool', el: poolEl };
+      return { index: parseInt(rankRow.dataset.index, 10), el: rankRow };
     }
     return null;
   }
@@ -738,11 +634,10 @@ const TEAMS = [
 
   function onDragPointerDown(e, meta, el) {
     if (e.pointerType === 'mouse' && e.button !== 0) return;
-    if (e.target.closest && e.target.closest('.zoom-btn, .remove-btn')) return;
+    if (e.target.closest && e.target.closest('.zoom-btn')) return;
     if (activeDrag) return;
     activeDrag = {
       pointerId: e.pointerId,
-      type: meta.type,
       id: meta.id,
       fromIndex: meta.fromIndex,
       startX: e.clientX,
@@ -780,18 +675,10 @@ const TEAMS = [
     if (drag.moved) {
       var targetInfo = resolveDropTarget(e.clientX, e.clientY);
       cleanupDrag();
-      if (targetInfo) {
-        if (targetInfo.type === 'rank') {
-          if (drag.type === 'pool') placeFromPool(drag.id, targetInfo.index);
-          else moveWithinRank(drag.fromIndex, targetInfo.index);
-        } else if (targetInfo.type === 'pool' && drag.type === 'rank') {
-          removeFromRank(drag.fromIndex);
-        }
-      }
+      if (targetInfo) moveWithinRank(drag.fromIndex, targetInfo.index);
     } else {
       cleanupDrag();
-      if (drag.type === 'pool') onPoolCardClick(drag.id);
-      else onRankRowClick(drag.fromIndex);
+      onRankRowClick(drag.fromIndex);
     }
   }
 
@@ -804,46 +691,13 @@ const TEAMS = [
   document.addEventListener('pointerup', onDragPointerUp);
   document.addEventListener('pointercancel', onDragPointerCancel);
 
-  function renderPool() {
-    poolEl.innerHTML = '';
-    if (pool.length === 0) {
-      var empty = document.createElement('div');
-      empty.className = 'pool-empty';
-      empty.textContent = 'Alle Trikots sind platziert.';
-      poolEl.appendChild(empty);
-      return;
-    }
-    pool.forEach(function (id) {
-      var t = teamById(id);
-      var card = document.createElement('div');
-      card.className = 'kit-card' + (selected && selected.type === 'pool' && selected.id === id ? ' selected' : '');
-      card.tabIndex = 0;
-      card.setAttribute('role', 'button');
-      card.setAttribute('aria-label', t.name + ' – ziehen oder antippen, um es einzusortieren');
-      card.dataset.id = id;
-      card.innerHTML = '<div class="thumb"><img src="' + t.img + '" alt="Heimtrikot ' + escapeHtml(t.name) + ' 26/27" draggable="false" loading="lazy">' +
-        '<button type="button" class="zoom-btn" aria-label="Großansicht: ' + escapeHtml(t.name) + '">' + ZOOM_ICON + '</button></div>' +
-        '<div class="name">' + escapeHtml(t.name) + '</div>';
-      card.querySelector('.zoom-btn').addEventListener('click', function (e) {
-        e.stopPropagation();
-        openPreview(id, e.currentTarget);
-      });
-      card.addEventListener('pointerdown', function (e) {
-        onDragPointerDown(e, { type: 'pool', id: id }, card);
-      });
-      card.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onPoolCardClick(id); }
-      });
-      poolEl.appendChild(card);
-    });
-  }
-
   function renderRanking() {
     rankListEl.innerHTML = '';
     ranking.forEach(function (id, idx) {
+      var t = teamById(id);
       var li = document.createElement('li');
-      var isSelectedRank = selected && selected.type === 'rank' && selected.index === idx;
-      li.className = 'rank-row ' + (id ? 'filled' : 'empty') + (isSelectedRank ? ' selected' : '');
+      var isSelectedRank = selected === idx;
+      li.className = 'rank-row filled' + (isSelectedRank ? ' selected' : '');
       li.dataset.zone = zoneFor(idx);
       li.dataset.index = String(idx);
 
@@ -854,79 +708,43 @@ const TEAMS = [
 
       var content = document.createElement('div');
       content.className = 'rank-content';
-      if (id) {
-        var t = teamById(id);
-        content.innerHTML = '<div class="thumb"><img src="' + t.img + '" alt="" draggable="false" loading="lazy">' +
-          '<button type="button" class="zoom-btn" aria-label="Großansicht: ' + escapeHtml(t.name) + '">' + ZOOM_ICON + '</button></div>' +
-          '<div class="name">' + escapeHtml(t.name) + '</div>';
-        content.querySelector('.zoom-btn').addEventListener('click', function (e) {
-          e.stopPropagation();
-          openPreview(id, e.currentTarget);
-        });
-      } else {
-        content.innerHTML = '<div class="empty-hint">Trikot hier ablegen</div>';
-      }
+      content.innerHTML = '<div class="thumb"><img src="' + t.img + '" alt="" draggable="false" loading="lazy">' +
+        '<button type="button" class="zoom-btn" aria-label="Großansicht: ' + escapeHtml(t.name) + '">' + ZOOM_ICON + '</button></div>' +
+        '<div class="name">' + escapeHtml(t.name) + '</div>';
+      content.querySelector('.zoom-btn').addEventListener('click', function (e) {
+        e.stopPropagation();
+        openPreview(id, e.currentTarget);
+      });
       li.appendChild(content);
 
-      if (id) {
-        var removeBtn = document.createElement('button');
-        removeBtn.type = 'button';
-        removeBtn.className = 'remove-btn';
-        removeBtn.setAttribute('aria-label', teamById(id).name + ' aus der Tabelle entfernen');
-        removeBtn.textContent = '×';
-        removeBtn.addEventListener('click', function (e) { e.stopPropagation(); removeFromRank(idx); });
-        li.appendChild(removeBtn);
-      }
-
-      if (id) {
-        li.tabIndex = 0;
-        li.setAttribute('role', 'button');
-        li.setAttribute('aria-label', teamById(id).name + ', Platz ' + (idx + 1) + '. Ziehen zum Umsortieren, Entf zum Entfernen.');
-        li.addEventListener('pointerdown', function (e) {
-          onDragPointerDown(e, { type: 'rank', id: id, fromIndex: idx }, li);
-        });
-        li.addEventListener('keydown', function (e) {
-          if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onRankRowClick(idx); }
-          else if (e.key === 'Delete' || e.key === 'Backspace') { e.preventDefault(); removeFromRank(idx); }
-        });
-      } else {
-        li.tabIndex = -1;
-        li.addEventListener('click', function () { onRankRowClick(idx); });
-      }
+      li.tabIndex = 0;
+      li.setAttribute('role', 'button');
+      li.setAttribute('aria-label', t.name + ', Platz ' + (idx + 1) + '. Ziehen oder antippen zum Umsortieren.');
+      li.addEventListener('pointerdown', function (e) {
+        onDragPointerDown(e, { id: id, fromIndex: idx }, li);
+      });
+      li.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onRankRowClick(idx); }
+      });
 
       rankListEl.appendChild(li);
     });
   }
 
-  function updateProgress() {
-    var count = ranking.filter(Boolean).length;
-    progressCountEl.textContent = String(count);
-  }
-
   function render() {
-    renderPool();
     renderRanking();
-    updateProgress();
     persist();
   }
 
   document.getElementById('shuffleBtn').addEventListener('click', function () {
-    shuffle(pool);
-    render();
-  });
-
-  document.getElementById('resetBtn').addEventListener('click', function () {
-    if (ranking.every(function (v) { return v === null; })) return;
-    if (!window.confirm('Tabelle wirklich zurücksetzen? Alle Trikots wandern zurück in die Kammer.')) return;
-    ranking = new Array(18).fill(null);
-    pool = freshPool();
+    ranking = freshRanking();
     selected = null;
     render();
   });
 
   document.getElementById('copyBtn').addEventListener('click', function () {
     var lines = ranking.map(function (id, idx) {
-      return (idx + 1) + '. ' + (id ? teamById(id).name : '—');
+      return (idx + 1) + '. ' + teamById(id).name;
     });
     var text = 'Bundesliga Heimtrikots 2026/27 – Meine Tabelle\n' + lines.join('\n');
     if (navigator.clipboard && navigator.clipboard.writeText) {
