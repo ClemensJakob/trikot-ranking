@@ -183,24 +183,23 @@
   }
   .panel h2 .hint { font-size: .68rem; font-weight: 500; text-transform: none; letter-spacing: 0; color: var(--text-dim); }
 
-  .rank-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .4rem; }
+  .rank-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: .2rem; }
 
   .rank-row {
-    display: grid; grid-template-columns: 40px 1fr;
-    align-items: stretch; min-height: 58px;
+    display: grid; grid-template-columns: 32px 1fr auto;
+    align-items: stretch; min-height: 42px;
     border-radius: 6px; position: relative;
     transition: background .15s ease, box-shadow .15s ease, border-color .15s ease;
   }
-  .rank-row.filled { background: var(--card); border: 1px solid var(--line); cursor: grab; }
+  .rank-row.filled { background: var(--card); border: 1px solid var(--line); }
   .rank-row.filled:hover { border-color: var(--line-strong); box-shadow: var(--shadow); }
   .rank-row.dragover { box-shadow: inset 0 0 0 2px var(--accent); background: var(--accent-soft); }
   .rank-row.dragging { opacity: .35; }
   .rank-row.selected { box-shadow: 0 0 0 2px var(--accent); }
-  .rank-row:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
   .rank-num {
     display: flex; align-items: center; justify-content: center;
-    font-family: 'Anton', Impact, sans-serif; font-size: 1.15rem; color: var(--text-dim);
+    font-family: 'Anton', Impact, sans-serif; font-size: 1rem; color: var(--text-dim);
     border-right: 1px dashed var(--line-strong);
     border-left: 4px solid transparent;
     font-variant-numeric: tabular-nums;
@@ -212,10 +211,23 @@
   .rank-row[data-zone="playoff"] .rank-num { border-left-color: var(--z-playoff); }
   .rank-row[data-zone="rel"] .rank-num { border-left-color: var(--z-rel); }
 
-  .rank-content { display: flex; align-items: center; gap: .65rem; padding: .4rem .7rem; min-width: 0; }
-  .rank-content .thumb { width: 38px; height: 38px; border-radius: 4px; overflow: hidden; flex-shrink: 0; background: #f4f4f0; }
+  .rank-content {
+    display: flex; align-items: center; gap: .5rem; padding: .3rem .55rem; min-width: 0;
+    width: 100%; background: none; border: 0; font: inherit; color: inherit; text-align: left;
+    cursor: zoom-in;
+  }
+  .rank-content:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+  .rank-content .thumb { width: 28px; height: 28px; border-radius: 4px; overflow: hidden; flex-shrink: 0; background: #f4f4f0; }
   .rank-content .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .rank-content .name { font-weight: 600; font-size: .86rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rank-content .name { font-weight: 600; font-size: .82rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  .drag-handle {
+    align-self: stretch; width: 34px; margin: 0; padding: 0; border: 0; border-left: 1px dashed var(--line-strong);
+    background: transparent; color: var(--text-dim); cursor: grab;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .drag-handle:active { cursor: grabbing; }
+  .drag-handle svg { width: 15px; height: 15px; pointer-events: none; }
 
   .legend {
     list-style: none; margin: 1rem 0 0; padding: .8rem 0 0;
@@ -251,21 +263,6 @@
   }
   .toast.show { opacity: 1; transform: translate(-50%, 0); }
 
-  .thumb { position: relative; }
-  .zoom-btn {
-    position: absolute; top: 4px; right: 4px; z-index: 2;
-    width: 22px; height: 22px; border-radius: 50%; padding: 0;
-    display: flex; align-items: center; justify-content: center;
-    background: rgba(10, 16, 13, 0.55); border: 1px solid rgba(245,241,230,0.35);
-    color: #f5f1e6; cursor: pointer; backdrop-filter: blur(2px);
-    opacity: 0.85; transition: opacity .15s ease, background .15s ease, transform .15s ease;
-  }
-  .zoom-btn:hover { opacity: 1; background: rgba(10, 16, 13, 0.8); transform: scale(1.08); }
-  .zoom-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; opacity: 1; }
-  .zoom-btn svg { width: 12px; height: 12px; display: block; }
-  .rank-content .thumb .zoom-btn { width: 20px; height: 20px; }
-  .rank-content .thumb .zoom-btn svg { width: 11px; height: 11px; }
-
   .lightbox {
     position: fixed; inset: 0; z-index: 30;
     display: flex; align-items: center; justify-content: center;
@@ -296,6 +293,40 @@
   .lightbox-img { border-radius: 6px; overflow: hidden; background: #f4f4f0; max-height: 68vh; }
   .lightbox-img img { width: 100%; height: 100%; max-height: 68vh; object-fit: contain; display: block; }
 
+  /* ---- 1-gegen-1-Duell-Modus ---- */
+
+  .duel-overlay {
+    position: fixed; inset: 0; z-index: 30;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 1.4rem; padding: 1.6rem;
+    background: var(--bg);
+    opacity: 0; pointer-events: none; transition: opacity .18s ease;
+  }
+  .duel-overlay.show { opacity: 1; pointer-events: auto; }
+  .duel-head { display: flex; flex-direction: column; align-items: center; gap: .3rem; text-align: center; }
+  .duel-title { font-family: 'Anton', Impact, sans-serif; font-size: clamp(1.3rem, 3.4vw, 1.8rem); text-transform: uppercase; letter-spacing: .01em; }
+  .duel-progress { font-size: .8rem; color: var(--text-dim); }
+  .duel-pair { display: flex; align-items: center; justify-content: center; gap: 1.2rem; width: 100%; max-width: 720px; }
+  .duel-card {
+    flex: 1 1 260px; max-width: 300px;
+    background: var(--card); border: 1px solid var(--line-strong); border-radius: 10px;
+    padding: 1rem; display: flex; flex-direction: column; align-items: center; gap: .7rem;
+    cursor: pointer; color: inherit; font-family: inherit;
+    transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+  }
+  .duel-card:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: var(--shadow); }
+  .duel-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .duel-thumb { width: 100%; aspect-ratio: 4 / 5; border-radius: 6px; overflow: hidden; background: #f4f4f0; }
+  .duel-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .duel-name { font-weight: 700; font-size: 1rem; text-align: center; }
+  .duel-vs { font-family: 'Anton', Impact, sans-serif; font-size: 1.1rem; color: var(--text-dim); flex-shrink: 0; }
+  .duel-cancel { margin-top: .4rem; }
+  @media (max-width: 620px) {
+    .duel-pair { flex-direction: column; gap: .8rem; }
+    .duel-card { max-width: 320px; width: 100%; }
+    .duel-vs { display: none; }
+  }
+
   /* ---- Pointer-based drag & drop (mouse, touch, pen) ---- */
 
   .rank-content .thumb img, .lightbox-img img {
@@ -321,12 +352,9 @@
   /* ---- Larger touch targets on touch-primary devices ---- */
 
   @media (pointer: coarse) {
-    .zoom-btn { width: 32px; height: 32px; }
-    .zoom-btn svg { width: 16px; height: 16px; }
-    .rank-content .thumb .zoom-btn { width: 30px; height: 30px; }
-    .rank-content .thumb .zoom-btn svg { width: 15px; height: 15px; }
+    .drag-handle { width: 42px; }
+    .drag-handle svg { width: 18px; height: 18px; }
     .btn { padding: .75rem 1.05rem; }
-    .rank-row { cursor: default; }
   }
 
   /* ---- Small screens: bigger, fewer elements instead of tiny ones ---- */
@@ -342,11 +370,11 @@
     .board { gap: 1.1rem; margin-top: 1.2rem; }
     .panel { padding: .9rem; }
 
-    .rank-row { grid-template-columns: 44px 1fr; min-height: 66px; }
-    .rank-num { font-size: 1.25rem; }
-    .rank-content { gap: .6rem; padding: .5rem .6rem; }
-    .rank-content .thumb { width: 46px; height: 46px; }
-    .rank-content .name { font-size: .92rem; white-space: normal; }
+    .rank-row { grid-template-columns: 38px 1fr auto; min-height: 52px; }
+    .rank-num { font-size: 1.05rem; }
+    .rank-content { gap: .5rem; padding: .4rem .5rem; }
+    .rank-content .thumb { width: 36px; height: 36px; }
+    .rank-content .name { font-size: .88rem; white-space: normal; }
   }
 </style>
 
@@ -359,6 +387,7 @@
       <div class="toolbar">
         <div class="actions">
           <button class="btn" id="shuffleBtn" type="button">Neu mischen</button>
+          <button class="btn" id="duelBtn" type="button">1 gegen 1</button>
           <button class="btn primary" id="copyBtn" type="button">Ranking kopieren</button>
         </div>
       </div>
@@ -394,6 +423,25 @@
     </div>
     <div class="lightbox-img"><img id="lightboxImg" src="" alt=""></div>
   </div>
+</div>
+
+<div class="duel-overlay" id="duelOverlay" role="dialog" aria-modal="true" aria-label="1 gegen 1 Vergleich">
+  <div class="duel-head">
+    <div class="duel-title">Welches Trikot gefällt dir besser?</div>
+    <div class="duel-progress" id="duelProgress"></div>
+  </div>
+  <div class="duel-pair">
+    <button type="button" class="duel-card" id="duelCardA">
+      <div class="duel-thumb"><img id="duelImgA" src="" alt="" draggable="false"></div>
+      <div class="duel-name" id="duelNameA"></div>
+    </button>
+    <div class="duel-vs">vs</div>
+    <button type="button" class="duel-card" id="duelCardB">
+      <div class="duel-thumb"><img id="duelImgB" src="" alt="" draggable="false"></div>
+      <div class="duel-name" id="duelNameB"></div>
+    </button>
+  </div>
+  <button type="button" class="btn duel-cancel" id="duelCancel">Abbrechen</button>
 </div>
 
 <script>
@@ -440,7 +488,23 @@ const TEAMS = [
   var lightboxCloseEl = document.getElementById('lightboxClose');
   var lastFocused = null;
 
-  var ZOOM_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="10.5" cy="10.5" r="6.5"></circle><line x1="20" y1="20" x2="15.4" y2="15.4"></line></svg>';
+  var duelOverlayEl = document.getElementById('duelOverlay');
+  var duelProgressEl = document.getElementById('duelProgress');
+  var duelCardAEl = document.getElementById('duelCardA');
+  var duelImgAEl = document.getElementById('duelImgA');
+  var duelNameAEl = document.getElementById('duelNameA');
+  var duelCardBEl = document.getElementById('duelCardB');
+  var duelImgBEl = document.getElementById('duelImgB');
+  var duelNameBEl = document.getElementById('duelNameB');
+  var duelCancelEl = document.getElementById('duelCancel');
+  var duelBtnEl = document.getElementById('duelBtn');
+  var duelActive = false;
+  var duelCancelled = false;
+  var duelResolve = null;
+  var duelComparisons = 0;
+  var duelEstTotal = 0;
+
+  var DRAG_HANDLE_ICON = '<svg viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.7"></circle><circle cx="15" cy="6" r="1.7"></circle><circle cx="9" cy="12" r="1.7"></circle><circle cx="15" cy="12" r="1.7"></circle><circle cx="9" cy="18" r="1.7"></circle><circle cx="15" cy="18" r="1.7"></circle></svg>';
 
   function openPreview(id, triggerEl) {
     var t = teamById(id);
@@ -634,7 +698,6 @@ const TEAMS = [
 
   function onDragPointerDown(e, meta, el) {
     if (e.pointerType === 'mouse' && e.button !== 0) return;
-    if (e.target.closest && e.target.closest('.zoom-btn')) return;
     if (activeDrag) return;
     activeDrag = {
       pointerId: e.pointerId,
@@ -706,26 +769,29 @@ const TEAMS = [
       num.textContent = String(idx + 1);
       li.appendChild(num);
 
-      var content = document.createElement('div');
+      var content = document.createElement('button');
+      content.type = 'button';
       content.className = 'rank-content';
-      content.innerHTML = '<div class="thumb"><img src="' + t.img + '" alt="" draggable="false" loading="lazy">' +
-        '<button type="button" class="zoom-btn" aria-label="Großansicht: ' + escapeHtml(t.name) + '">' + ZOOM_ICON + '</button></div>' +
+      content.setAttribute('aria-label', 'Großansicht: ' + t.name);
+      content.innerHTML = '<div class="thumb"><img src="' + t.img + '" alt="" draggable="false" loading="lazy"></div>' +
         '<div class="name">' + escapeHtml(t.name) + '</div>';
-      content.querySelector('.zoom-btn').addEventListener('click', function (e) {
-        e.stopPropagation();
+      content.addEventListener('click', function (e) {
         openPreview(id, e.currentTarget);
       });
       li.appendChild(content);
 
-      li.tabIndex = 0;
-      li.setAttribute('role', 'button');
-      li.setAttribute('aria-label', t.name + ', Platz ' + (idx + 1) + '. Ziehen oder antippen zum Umsortieren.');
-      li.addEventListener('pointerdown', function (e) {
+      var handle = document.createElement('button');
+      handle.type = 'button';
+      handle.className = 'drag-handle';
+      handle.setAttribute('aria-label', t.name + ', Platz ' + (idx + 1) + '. Ziehen zum Umsortieren, oder Enter zum Auswählen und an einen anderen Platz verschieben.');
+      handle.innerHTML = DRAG_HANDLE_ICON;
+      handle.addEventListener('pointerdown', function (e) {
         onDragPointerDown(e, { id: id, fromIndex: idx }, li);
       });
-      li.addEventListener('keydown', function (e) {
+      handle.addEventListener('keydown', function (e) {
         if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onRankRowClick(idx); }
       });
+      li.appendChild(handle);
 
       rankListEl.appendChild(li);
     });
@@ -735,6 +801,108 @@ const TEAMS = [
     renderRanking();
     persist();
   }
+
+  // ---- 1-gegen-1-Duell-Modus: Merge-Sort, angetrieben durch Nutzerentscheidungen ----
+
+  function estimateDuelCount(n) {
+    if (n <= 1) return 0;
+    var k = Math.ceil(Math.log2(n));
+    return n * k - Math.pow(2, k) + 1;
+  }
+
+  function askDuel(idA, idB) {
+    return new Promise(function (resolve) {
+      duelResolve = resolve;
+      var a = teamById(idA), b = teamById(idB);
+      duelImgAEl.src = a.img;
+      duelNameAEl.textContent = a.name;
+      duelImgBEl.src = b.img;
+      duelNameBEl.textContent = b.name;
+      duelComparisons++;
+      duelProgressEl.textContent = 'Duell ' + duelComparisons + ' von ca. ' + duelEstTotal;
+    });
+  }
+
+  function mergeDuel(left, right) {
+    var result = [];
+    var i = 0, j = 0;
+    function step() {
+      if (duelCancelled || i >= left.length || j >= right.length) {
+        return Promise.resolve(result.concat(left.slice(i), right.slice(j)));
+      }
+      return askDuel(left[i], right[j]).then(function (choice) {
+        if (duelCancelled || choice === null) {
+          return result.concat(left.slice(i), right.slice(j));
+        }
+        if (choice === 'A') { result.push(left[i]); i++; } else { result.push(right[j]); j++; }
+        return step();
+      });
+    }
+    return step();
+  }
+
+  function mergeSortDuel(items) {
+    if (items.length <= 1 || duelCancelled) return Promise.resolve(items);
+    var mid = Math.floor(items.length / 2);
+    return mergeSortDuel(items.slice(0, mid)).then(function (left) {
+      if (duelCancelled) return items;
+      return mergeSortDuel(items.slice(mid)).then(function (right) {
+        if (duelCancelled) return items;
+        return mergeDuel(left, right);
+      });
+    });
+  }
+
+  function closeDuel() {
+    duelActive = false;
+    duelOverlayEl.classList.remove('show');
+    document.removeEventListener('keydown', onDuelKeydown);
+    duelResolve = null;
+    if (lastFocused && typeof lastFocused.focus === 'function') lastFocused.focus();
+  }
+
+  function cancelDuel() {
+    if (!duelActive) return;
+    duelCancelled = true;
+    if (duelResolve) { var r = duelResolve; duelResolve = null; r(null); }
+    closeDuel();
+  }
+
+  function onDuelKeydown(e) {
+    if (e.key === 'Escape') cancelDuel();
+  }
+
+  function openDuel() {
+    if (duelActive) return;
+    duelActive = true;
+    duelCancelled = false;
+    duelComparisons = 0;
+    duelEstTotal = estimateDuelCount(ranking.length);
+    lastFocused = document.activeElement;
+    duelProgressEl.textContent = 'Bereite Duelle vor …';
+    duelOverlayEl.classList.add('show');
+    document.addEventListener('keydown', onDuelKeydown);
+    duelCardAEl.focus();
+    mergeSortDuel(shuffle(ranking.slice())).then(function (sorted) {
+      var wasCancelled = duelCancelled;
+      if (!wasCancelled) {
+        ranking = sorted;
+        selected = null;
+        render();
+      }
+      closeDuel();
+      if (!wasCancelled) showToast('1-gegen-1-Ranking übernommen.');
+    });
+  }
+
+  duelCardAEl.addEventListener('click', function () {
+    if (duelResolve) { var r = duelResolve; duelResolve = null; r('A'); }
+  });
+  duelCardBEl.addEventListener('click', function () {
+    if (duelResolve) { var r = duelResolve; duelResolve = null; r('B'); }
+  });
+  duelCancelEl.addEventListener('click', cancelDuel);
+  duelBtnEl.addEventListener('click', openDuel);
 
   document.getElementById('shuffleBtn').addEventListener('click', function () {
     ranking = freshRanking();
