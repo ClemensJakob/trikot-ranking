@@ -298,35 +298,42 @@
   .duel-overlay {
     position: fixed; inset: 0; z-index: 30;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
-    gap: 1.4rem; padding: 1.6rem;
+    gap: .8rem; padding: 1.2rem;
     background: var(--bg);
     opacity: 0; pointer-events: none; transition: opacity .18s ease;
     overflow-y: auto;
   }
   .duel-overlay.show { opacity: 1; pointer-events: auto; }
-  .duel-head { display: flex; flex-direction: column; align-items: center; gap: .3rem; text-align: center; }
-  .duel-title { font-family: 'Anton', Impact, sans-serif; font-size: clamp(1.3rem, 3.4vw, 1.8rem); text-transform: uppercase; letter-spacing: .01em; }
+  .duel-head { flex: 0 0 auto; display: flex; flex-direction: column; align-items: center; gap: .3rem; text-align: center; }
+  .duel-title { font-family: 'Anton', Impact, sans-serif; font-size: clamp(1.1rem, 3.4vw, 1.8rem); text-transform: uppercase; letter-spacing: .01em; }
   .duel-progress { font-size: .8rem; color: var(--text-dim); }
-  .duel-pair { display: flex; align-items: center; justify-content: center; gap: 1.2rem; width: 100%; max-width: 720px; }
+  .duel-pair {
+    display: flex; align-items: center; justify-content: center; gap: 1.2rem;
+    width: 100%; max-width: 900px;
+    flex: 0 1 auto;
+  }
   .duel-card {
-    flex: 1 1 260px; max-width: 300px;
+    flex: 0 1 auto; width: min(42vw, 56vh, 400px); min-width: 0;
     background: var(--card); border: 1px solid var(--line-strong); border-radius: 10px;
-    padding: 1rem; display: flex; flex-direction: column; align-items: center; gap: .7rem;
+    padding: .8rem; display: flex; flex-direction: column; align-items: center; gap: .5rem;
     cursor: pointer; color: inherit; font-family: inherit;
     transition: transform .15s ease, border-color .15s ease, box-shadow .15s ease;
   }
   .duel-card:hover { transform: translateY(-3px); border-color: var(--accent); box-shadow: var(--shadow); }
   .duel-card:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
-  .duel-thumb { width: 100%; aspect-ratio: 4 / 5; border-radius: 6px; overflow: hidden; background: #f4f4f0; }
-  .duel-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .duel-name { font-weight: 700; font-size: 1rem; text-align: center; }
-  .duel-vs { font-family: 'Anton', Impact, sans-serif; font-size: 1.1rem; color: var(--text-dim); flex-shrink: 0; }
-  .duel-cancel { margin-top: .4rem; }
+  .duel-thumb {
+    width: 100%; aspect-ratio: 1 / 1;
+    border-radius: 6px; overflow: hidden; background: #f4f4f0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .duel-thumb img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .duel-name { flex: 0 0 auto; font-weight: 700; font-size: 1rem; text-align: center; }
+  .duel-vs { flex: 0 0 auto; font-family: 'Anton', Impact, sans-serif; font-size: 1.1rem; color: var(--text-dim); flex-shrink: 0; align-self: center; }
+  .duel-cancel { flex: 0 0 auto; margin-top: .2rem; }
   @media (max-width: 620px) {
-    .duel-overlay { gap: .8rem; padding: 1rem; }
-    .duel-pair { flex-direction: column; gap: .6rem; }
-    .duel-card { max-width: 320px; width: 100%; padding: .7rem; gap: .5rem; }
-    .duel-thumb { width: auto; height: 26vh; aspect-ratio: 4 / 5; }
+    .duel-overlay { gap: .6rem; padding: .7rem; }
+    .duel-pair { flex-direction: column; gap: .5rem; }
+    .duel-card { width: min(84vw, 38vh, 380px); padding: .6rem; gap: .4rem; }
     .duel-vs { display: none; }
   }
 
