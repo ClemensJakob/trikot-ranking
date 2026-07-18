@@ -301,6 +301,7 @@
     gap: 1.4rem; padding: 1.6rem;
     background: var(--bg);
     opacity: 0; pointer-events: none; transition: opacity .18s ease;
+    overflow-y: auto;
   }
   .duel-overlay.show { opacity: 1; pointer-events: auto; }
   .duel-head { display: flex; flex-direction: column; align-items: center; gap: .3rem; text-align: center; }
@@ -322,8 +323,10 @@
   .duel-vs { font-family: 'Anton', Impact, sans-serif; font-size: 1.1rem; color: var(--text-dim); flex-shrink: 0; }
   .duel-cancel { margin-top: .4rem; }
   @media (max-width: 620px) {
-    .duel-pair { flex-direction: column; gap: .8rem; }
-    .duel-card { max-width: 320px; width: 100%; }
+    .duel-overlay { gap: .8rem; padding: 1rem; }
+    .duel-pair { flex-direction: column; gap: .6rem; }
+    .duel-card { max-width: 320px; width: 100%; padding: .7rem; gap: .5rem; }
+    .duel-thumb { width: auto; height: 26vh; aspect-ratio: 4 / 5; }
     .duel-vs { display: none; }
   }
 
